@@ -1,4 +1,8 @@
-import { groupBy, filter, propEq, either } from 'ramda'
+import { groupBy, filter, propEq, either, map } from 'ramda'
+
+import messagesContract from '../utils/contract'
+
+const account = '0x51933443E33Bb61e0ed88556d70845551bf4Fad7'
 
 export const state = () => ({
   user: null,
@@ -15,23 +19,30 @@ export const mutations = {
   updateUser(state, payload) {
     state.user = payload
   },
-  addMessage(state, payload) {
+  async addMessage(state, payload) {
     state.messages = [...state.messages, payload]
     localStorage.setItem('messages', JSON.stringify(state.messages))
+    await messagesContract.methods
+      .sendMessage(payload.message, payload.from, payload.to)
+      .send({ from: account, gas: 3000000 })
   },
-  fetchMessages(state) {
-    state.messages = JSON.parse(localStorage.getItem('messages')) || []
+  async fetchMessages(state) {
+    const newMessages = await messagesContract.methods.listMessages(state.user).call()
+
+    state.messages = map(([from, to, message]) => ({
+      from,
+      to,
+      message,
+    }), newMessages)
   },
 }
 
 export const actions = {
   async login({ commit }, payload) {
     await commit('updateUser', payload.username)
-    // mutations state.user = payload.username
   },
   async fetchUserMessages({ state, commit }) {
     await commit('fetchMessages')
-    console.log('state', state.messages)
     return groupBy((item) => {
       if (item.from === state.user) {
         return item.to

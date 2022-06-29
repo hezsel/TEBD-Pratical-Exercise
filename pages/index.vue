@@ -241,8 +241,6 @@ export default {
     this.toggleColorMode()
     setInterval(async () => {
       this.messages = await this.fetchUserMessages()
-      console.log(this.messages)
-      // console.log(this.messages)
     }, 1000)
   },
   methods: {
