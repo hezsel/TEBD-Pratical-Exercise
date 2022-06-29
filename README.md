@@ -1,5 +1,32 @@
 # chat
 
+## Configuração da blockchain no localhost
+
+1- Instalar o Ganache
+2- Abrir o Ganache
+3- Criar uma blockchain com o "Quicksetup"
+
+## Deploy do smart contract usando Remix IDE
+
+1- Abrir o Remix IDE com http e não https
+2- Copiar e colar o código do contracts/Chat.sol
+3- Compilar o código
+4- Ir para aba de "Deploy"
+5- Alterar o "Environment" para "Web3 Provider"
+6- Inserir o endereço da blockchain "http://localhost:7545"
+7- Clicar OK
+8- Clicar Deploy
+9- Abrir o Ganache e encontrar o endereço em que o Smart Contract foi deployado
+10- Utilizar o endereço do Smart Contract para configurar o código
+
+## Configuração do código
+
+1- Abrir o repositório
+2- Entrar no arquivo utils/contract.js
+3- Alterar a variável "CONTRACT_ADDRESS" para o endereço do Smart Contract que foi deployado
+4- Salvar
+5- Rodar o "npm run dev"
+
 ## Build Setup
 
 ```bash
