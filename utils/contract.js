@@ -1,6 +1,6 @@
 import Web3 from 'web3'
 
-const CONTRACT_ADDRESS = '0x45646403E8d218334b58B2E1ecdA6fefdD9A9262'
+const CONTRACT_ADDRESS = '0x3196f303fcc865a045c663e56D3E40E10Fe7d070'
 
 const address = 'http://localhost:7545'
 
