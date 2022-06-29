@@ -9,7 +9,7 @@
 ## Deploy do smart contract usando Remix IDE
 
 1- Abrir o Remix IDE com http e não https
-2- Copiar e colar o código do Chat.sol
+2- Copiar e colar o código do contracts/Chat.sol
 3- Compilar o código
 4- Ir para aba de "Deploy"
 5- Alterar o "Environment" para "Web3 Provider"
