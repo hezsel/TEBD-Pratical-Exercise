@@ -1,4 +1,4 @@
-import { groupBy, filter, propEq, either, map } from 'ramda'
+import { groupBy, filter, propEq, either, map, clone } from 'ramda'
 
 import messagesContract from '../utils/contract'
 
@@ -21,19 +21,12 @@ export const mutations = {
   },
   async addMessage(state, payload) {
     state.messages = [...state.messages, payload]
-    localStorage.setItem('messages', JSON.stringify(state.messages))
     await messagesContract.methods
       .sendMessage(payload.message, payload.from, payload.to)
       .send({ from: account, gas: 3000000 })
   },
-  async fetchMessages(state) {
-    const newMessages = await messagesContract.methods.listMessages(state.user).call()
-
-    state.messages = map(([from, to, message]) => ({
-      from,
-      to,
-      message,
-    }), newMessages)
+  fetchMessages(state, payload) {
+    state.messages = payload
   },
 }
 
@@ -42,7 +35,18 @@ export const actions = {
     await commit('updateUser', payload.username)
   },
   async fetchUserMessages({ state, commit }) {
-    await commit('fetchMessages')
+    const newMessages = await messagesContract.methods
+      .listMessages(state.user)
+      .call()
+    const formatedMessages = map(
+      ([from, to, message]) => ({
+        from,
+        to,
+        message,
+      }),
+      newMessages
+    )
+    await commit('fetchMessages', formatedMessages)
     return groupBy((item) => {
       if (item.from === state.user) {
         return item.to
@@ -50,10 +54,7 @@ export const actions = {
       if (item.to === state.user) {
         return item.from
       }
-    }, filter(
-      either(propEq('to', state.user), propEq('from', state.user)),
-      state.messages,
-    ))
+    }, filter(either(propEq('to', state.user), propEq('from', state.user)), clone(state.messages)))
   },
   async sendMessage({ state, commit }, payload) {
     console.log('sendMessage', payload)
@@ -63,5 +64,5 @@ export const actions = {
       message: payload.message,
     })
     return state.messages
-  }
+  },
 }

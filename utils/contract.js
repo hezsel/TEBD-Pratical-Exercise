@@ -1,8 +1,8 @@
 import Web3 from 'web3'
 
-const CONTRACT_ADDRESS = '0x3196f303fcc865a045c663e56D3E40E10Fe7d070'
+const CONTRACT_ADDRESS = '0x45646403E8d218334b58B2E1ecdA6fefdD9A9262'
 
-const address = 'http://021d-2804-431-e7c4-d09e-3c4b-73e2-c456-164a.ngrok.io'
+const address = 'http://localhost:7545'
 
 const web3 = new Web3(new Web3.providers.HttpProvider(address))
 
