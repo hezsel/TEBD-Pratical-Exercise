@@ -123,7 +123,7 @@
               
               style='text-align: right;'
             >
-              <CBox my="1" mx="3" w="100%">
+              <CBox v-if="message" my="1" mx="3" w="100%">
                 <CFlex direction="column" :style='getMessageAlign(message)' w="100%">
                   {{ message.message }}
                 </CFlex>
@@ -239,7 +239,11 @@ export default {
   },
   created() {
     this.toggleColorMode()
-    // ... set time out for fetch messages
+    setInterval(async () => {
+      this.messages = await this.fetchUserMessages()
+      console.log(this.messages)
+      // console.log(this.messages)
+    }, 1000)
   },
   methods: {
     ...mapActions({
@@ -272,7 +276,11 @@ export default {
         return
       }
       if (!this.messages[this.newChatUser]) {
-        this.messages[this.newChatUser] = []  
+        console.log(this.newChatUser)
+        this.sendMessage({
+          message: null,
+          to: this.newChatUser,
+        })
         this.showToast({
           message: 'Chat criado!',
           description: `Seu chat com ${this.newChatUser} foi aberto`,
